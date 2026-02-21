@@ -62,7 +62,8 @@ export default function App() {
           onClick={() => setView('search')}
           style={{ cursor: 'pointer' }}
         >
-          🌍 StayFinder
+          <img src="/icon-512.png" alt="StayFinder" className="app-logo-img" />
+          <span className="app-logo-name">StayFinder</span>
         </div>
         <div className="header-controls">
           <CurrencyToggle />
