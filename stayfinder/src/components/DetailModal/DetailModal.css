@@ -282,6 +282,19 @@
     color: var(--text-primary);
 }
 
+/* Price disclaimer — Bug #3 fix */
+.price-disclaimer {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+
 /* Checkin info */
 .checkin-info {
     background: var(--bg-secondary);

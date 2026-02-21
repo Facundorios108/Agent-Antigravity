@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useCurrency } from '../../context/CurrencyContext';
 import './DetailModal.css';
 
 export function DetailModal({ hotel, checkinDate, checkoutDate, isFavorite, onToggleFavorite, onClose, destinationName }) {
+    const { t } = useTranslation();
     const { formatPrice } = useCurrency();
     const [activeImg, setActiveImg] = useState(0);
     if (!hotel) return null;
@@ -20,11 +22,11 @@ export function DetailModal({ hotel, checkinDate, checkoutDate, isFavorite, onTo
     const ratingLabel = () => {
         if (!rating) return '';
         const r = Number(rating);
-        if (r >= 9.5) return 'Excepcional';
-        if (r >= 9) return 'Fabuloso';
-        if (r >= 8.5) return 'Excelente';
-        if (r >= 8) return 'Muy bueno';
-        if (r >= 7) return 'Bueno';
+        if (r >= 9.5) return t('modal.ratingExceptional', 'Excepcional');
+        if (r >= 9) return t('modal.ratingFabulous', 'Fabuloso');
+        if (r >= 8.5) return t('modal.ratingExcellent', 'Excelente');
+        if (r >= 8) return t('modal.ratingVeryGood', 'Muy bueno');
+        if (r >= 7) return t('modal.ratingGood', 'Bueno');
         return hotel.reviewScoreWord || '';
     };
 
@@ -41,11 +43,9 @@ export function DetailModal({ hotel, checkinDate, checkoutDate, isFavorite, onTo
                     ) : (
                         <div className="modal-img-placeholder">🏨</div>
                     )}
-                    {/* Image count badge */}
                     {images.length > 1 && (
                         <div className="img-count">{activeImg + 1} / {images.length}</div>
                     )}
-                    {/* Thumbnail strip */}
                     {images.length > 1 && (
                         <div className="thumbnail-strip">
                             {images.map((url, i) => (
@@ -88,7 +88,7 @@ export function DetailModal({ hotel, checkinDate, checkoutDate, isFavorite, onTo
                             <span className="rating-badge">{rating}</span>
                             <span className="rating-label">{ratingLabel()}</span>
                             {hotel.reviewCount > 0 && (
-                                <span className="review-count">· {hotel.reviewCount} reseñas</span>
+                                <span className="review-count">· {hotel.reviewCount} {t('results.reviews', { count: hotel.reviewCount }).replace(/^\d+ /, '')}</span>
                             )}
                         </div>
                     )}
@@ -103,21 +103,23 @@ export function DetailModal({ hotel, checkinDate, checkoutDate, isFavorite, onTo
                         <div className="modal-price-box">
                             <div className="price-box-header">
                                 {strikeFmt && (
-                                    <span className="price-strike-lg">{strikeFmt}/noche</span>
+                                    <span className="price-strike-lg">{strikeFmt}{t('card.perNight')}</span>
                                 )}
                                 <span className="price-per-night">
                                     <strong>{perNightFmt}</strong>
-                                    <span className="price-night-label"> /noche</span>
+                                    <span className="price-night-label"> {t('card.perNight')}</span>
                                 </span>
                             </div>
                             <div className="price-breakdown">
-                                <span>{perNightFmt} × {nights} {nights === 1 ? 'noche' : 'noches'}</span>
+                                <span>{perNightFmt} × {t(`modal.nights_${nights === 1 ? 'one' : 'other'}`, { count: nights })}</span>
                                 <strong>{totalFmt}</strong>
                             </div>
                             <div className="price-total-row">
-                                <span>Total estadía</span>
+                                <span>{t('modal.totalStay')}</span>
                                 <strong>{totalFmt}</strong>
                             </div>
+                            {/* Bug #3 fix: disclaimer about inclusive pricing */}
+                            <div className="price-disclaimer">ℹ️ {t('modal.pricesIncludeTax')}</div>
                         </div>
                     )}
 
@@ -127,19 +129,19 @@ export function DetailModal({ hotel, checkinDate, checkoutDate, isFavorite, onTo
                             {hotel.checkinTime && (
                                 <div className="checkin-row">
                                     <span className="checkin-icon">🏠</span>
-                                    <span>Check-in desde las {hotel.checkinTime}</span>
+                                    <span>{t('modal.checkIn')} {hotel.checkinTime}</span>
                                 </div>
                             )}
                             {hotel.checkoutTime && (
                                 <div className="checkin-row">
                                     <span className="checkin-icon">🧳</span>
-                                    <span>Check-out hasta las {hotel.checkoutTime}</span>
+                                    <span>{t('modal.checkOut')} {hotel.checkoutTime}</span>
                                 </div>
                             )}
                             {checkinDate && checkoutDate && (
                                 <div className="checkin-row">
                                     <span className="checkin-icon">📅</span>
-                                    <span>{checkinDate} → {checkoutDate} ({nights} noches)</span>
+                                    <span>{checkinDate} → {checkoutDate} ({t(`modal.nights_${nights === 1 ? 'one' : 'other'}`, { count: nights })})</span>
                                 </div>
                             )}
                         </div>
@@ -148,7 +150,7 @@ export function DetailModal({ hotel, checkinDate, checkoutDate, isFavorite, onTo
                     {/* Badges / Amenities */}
                     {hotel.badges?.length > 0 && (
                         <div className="modal-amenities">
-                            <h4>Ventajas destacadas</h4>
+                            <h4>{t('modal.amenities')}</h4>
                             <div className="badges-wrap">
                                 {hotel.badges.map((b, i) => (
                                     <span key={i} className="amenity-badge">✓ {b.text}</span>
@@ -164,7 +166,7 @@ export function DetailModal({ hotel, checkinDate, checkoutDate, isFavorite, onTo
                         rel="noopener noreferrer"
                         className="book-btn"
                     >
-                        Ver en Booking.com →
+                        {t('modal.bookNow')}
                     </a>
                 </div>
             </div>

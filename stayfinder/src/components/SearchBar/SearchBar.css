@@ -261,3 +261,15 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* Date validation error */
+.date-error {
+    background: #fff3cd;
+    color: #856404;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid #ffc107;
+    margin-top: -4px;
+}

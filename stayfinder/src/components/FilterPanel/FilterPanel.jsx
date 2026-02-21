@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import './FilterPanel.css';
 
 const SORT_OPTIONS = [
-    { value: 'popularity', label: '🔥 Popular' },
-    { value: 'price', label: '💰 Precio ↑' },
-    { value: 'bayesian_review_score', label: '⭐ Mejor rating' },
-    { value: 'distance', label: '📍 Distancia' },
+    { value: 'popularity', labelKey: 'filters.sortPopular' },
+    { value: 'price', labelKey: 'filters.sortPriceLow' },
+    { value: 'bayesian_review_score', labelKey: 'filters.sortRating' },
+    { value: 'distance', labelKey: 'filters.sortDistance' },
 ];
 
 const STARS = [1, 2, 3, 4, 5];
@@ -45,7 +45,7 @@ export function FilterPanel({ filters, onChange, onApply, onReset, show }) {
         <div className="filter-panel">
             {/* Sort */}
             <div className="filter-section">
-                <div className="filter-label">Ordenar por</div>
+                <div className="filter-label">{t('filters.sortBy')}</div>
                 <div className="sort-chips">
                     {SORT_OPTIONS.map((opt) => (
                         <button
@@ -53,7 +53,7 @@ export function FilterPanel({ filters, onChange, onApply, onReset, show }) {
                             className={`sort-chip ${localFilters.sort === opt.value ? 'active' : ''}`}
                             onClick={() => update('sort', opt.value)}
                         >
-                            {opt.label}
+                            {t(opt.labelKey)}
                         </button>
                     ))}
                 </div>
@@ -61,7 +61,7 @@ export function FilterPanel({ filters, onChange, onApply, onReset, show }) {
 
             {/* Stars */}
             <div className="filter-section">
-                <div className="filter-label">Categoría (estrellas)</div>
+                <div className="filter-label">{t('filters.starsCategory')}</div>
                 <div className="stars-row">
                     {STARS.map((s) => (
                         <button
@@ -77,7 +77,7 @@ export function FilterPanel({ filters, onChange, onApply, onReset, show }) {
 
             {/* Rating */}
             <div className="filter-section">
-                <div className="filter-label">Rating mínimo</div>
+                <div className="filter-label">{t('filters.minRating')}</div>
                 <div className="rating-row">
                     {[7, 8, 8.5, 9].map((r) => (
                         <button
@@ -93,7 +93,7 @@ export function FilterPanel({ filters, onChange, onApply, onReset, show }) {
 
             {/* Price */}
             <div className="filter-section">
-                <div className="filter-label">Precio/noche (USD)</div>
+                <div className="filter-label">{t('filters.pricePerNight')}</div>
                 <div className="price-row">
                     <div className="price-input-wrap">
                         <span>$</span>
@@ -119,8 +119,8 @@ export function FilterPanel({ filters, onChange, onApply, onReset, show }) {
 
             {/* Actions */}
             <div className="filter-actions">
-                <button className="filter-reset-btn" onClick={handleReset}>Limpiar</button>
-                <button className="filter-apply-btn" onClick={handleApply}>Ver resultados</button>
+                <button className="filter-reset-btn" onClick={handleReset}>{t('filters.clear')}</button>
+                <button className="filter-apply-btn" onClick={handleApply}>{t('filters.apply')}</button>
             </div>
         </div>
     );

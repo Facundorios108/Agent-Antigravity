@@ -17,6 +17,25 @@ const DEFAULT_FILTERS = {
     minRating: null,
 };
 
+/** Client-side sort based on filter.sort value */
+function sortResults(list, sort) {
+    const arr = [...list];
+    switch (sort) {
+        case 'price':
+            return arr.sort((a, b) => (a.perNightUsd ?? Infinity) - (b.perNightUsd ?? Infinity));
+        case 'bayesian_review_score':
+            return arr.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+        default:
+            return arr; // 'popularity' and 'distance' rely on server order
+    }
+}
+
+/** Shorten "New York, United States" → "New York" */
+function shortDestName(label) {
+    if (!label) return '';
+    return label.split(',')[0].trim();
+}
+
 export function ResultsPage({ results: initialResults, searchParams, isFavorite, onToggleFavorite }) {
     const { t } = useTranslation();
     const [showFilters, setShowFilters] = useState(false);
@@ -26,22 +45,26 @@ export function ResultsPage({ results: initialResults, searchParams, isFavorite,
     const [viewMode, setViewMode] = useState('list'); // 'list' | 'map'
     const [selectedHotel, setSelectedHotel] = useState(null);
 
-    const destinationName = searchParams?.destination?.label || searchParams?.query || '';
+    const destinationName = shortDestName(searchParams?.destination?.label || searchParams?.query || '');
 
-    // Client-side filters
+    // Client-side filter + sort (Bug #2 fix: sort applied here)
     const filtered = useMemo(() => {
-        return results.filter((h) => {
+        const list = results.filter((h) => {
             if (filters.minRating && (h.rating ?? 0) < filters.minRating) return false;
             if (filters.priceMin !== '' && filters.priceMin != null && h.perNightUsd != null && h.perNightUsd < Number(filters.priceMin)) return false;
             if (filters.priceMax !== '' && filters.priceMax != null && h.perNightUsd != null && h.perNightUsd > Number(filters.priceMax)) return false;
             if (filters.stars?.length > 0 && !filters.stars.includes(h.stars)) return false;
             return true;
         });
+        return sortResults(list, filters.sort);
     }, [results, filters]);
 
+    // Server-side re-fetch only for sort modes that need it ('popularity', 'distance')
     const handleApplyFilters = async (liveFilters) => {
         setShowFilters(false);
-        if (!searchParams?.destination?.locationId) return;
+        const serverSortModes = ['popularity', 'distance'];
+        const needsRefetch = serverSortModes.includes(liveFilters?.sort || filters.sort);
+        if (!needsRefetch || !searchParams?.destination?.locationId) return;
         setLoading(true);
         try {
             const data = await searchProperties({
@@ -71,7 +94,7 @@ export function ResultsPage({ results: initialResults, searchParams, isFavorite,
             {/* Header bar */}
             <div className="results-header">
                 <div className="results-count">
-                    {loading ? '⏳ Buscando...' : `${filtered.length} propiedades encontradas`}
+                    {loading ? `⏳ ${t('results.loading')}` : t('results.found', { count: filtered.length })}
                 </div>
                 <div className="header-actions">
                     {/* View toggle */}
@@ -91,7 +114,7 @@ export function ResultsPage({ results: initialResults, searchParams, isFavorite,
                         className={`filter-toggle-btn ${showFilters ? 'active' : ''}`}
                         onClick={() => setShowFilters((s) => !s)}
                     >
-                        ⚙️ Filtros
+                        ⚙️ {t('filters.title')}
                     </button>
                 </div>
             </div>
@@ -122,12 +145,12 @@ export function ResultsPage({ results: initialResults, searchParams, isFavorite,
             ) : filtered.length === 0 ? (
                 <div className="results-empty">
                     <span className="empty-icon">🔍</span>
-                    <h3>Sin resultados</h3>
-                    <p>Intentá ajustar los filtros</p>
-                    <button className="reset-link" onClick={resetFilters}>Limpiar filtros</button>
+                    <h3>{t('results.empty')}</h3>
+                    <p>{t('results.emptyHint')}</p>
+                    <button className="reset-link" onClick={resetFilters}>{t('results.clearFilters')}</button>
                 </div>
             ) : viewMode === 'map' ? (
-                <Suspense fallback={<div className="map-loading">Cargando mapa...</div>}>
+                <Suspense fallback={<div className="map-loading">{t('results.loadingMap')}</div>}>
                     <MapView hotels={filtered} onHotelClick={setSelectedHotel} />
                 </Suspense>
             ) : (

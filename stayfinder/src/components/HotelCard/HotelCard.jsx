@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { useCurrency } from '../../context/CurrencyContext';
 import './HotelCard.css';
 
 export function HotelCard({ hotel, isFavorite, onToggleFavorite, onClick }) {
+    const { t } = useTranslation();
     const { formatPrice } = useCurrency();
 
     const rating = hotel.rating ? Number(hotel.rating).toFixed(1) : null;
@@ -22,7 +24,7 @@ export function HotelCard({ hotel, isFavorite, onToggleFavorite, onClick }) {
                 <button
                     className={`fav-btn ${isFavorite ? 'active' : ''}`}
                     onClick={(e) => { e.stopPropagation(); onToggleFavorite(hotel); }}
-                    aria-label={isFavorite ? 'Saved' : 'Save'}
+                    aria-label={isFavorite ? t('card.saved') : t('card.save')}
                 >
                     {isFavorite ? '❤️' : '🤍'}
                 </button>
@@ -51,7 +53,7 @@ export function HotelCard({ hotel, isFavorite, onToggleFavorite, onClick }) {
                             <span className="price-strike">{strikethrough}</span>
                         )}
                         <strong>{perNight}</strong>
-                        <span className="price-night"> /noche</span>
+                        <span className="price-night"> {t('card.perNight')}</span>
                     </span>
                 </div>
             </div>

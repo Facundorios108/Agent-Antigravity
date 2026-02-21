@@ -10,7 +10,7 @@ import { useCurrency } from './context/CurrencyContext';
 import './App.css';
 
 function CurrencyToggle() {
-  const { currency, setCurrency, label } = useCurrency();
+  const { currency, setCurrency } = useCurrency();
   return (
     <button
       className="currency-toggle"
@@ -24,7 +24,10 @@ function CurrencyToggle() {
 
 export default function App() {
   const { t } = useTranslation();
-  const [activePage, setActivePage] = useState('search');
+  // Bug #8 fix: 'activePage' only controls which tab is shown in BottomNav.
+  // We use a separate 'view' state for actual page rendering so that going to
+  // Favorites and back to Search doesn't wipe out the search results.
+  const [view, setView] = useState('search'); // 'search' | 'results' | 'favorites'
   const [searchResults, setSearchResults] = useState([]);
   const [searchParams, setSearchParams] = useState(null);
   const [globalLoading, setGlobalLoading] = useState(false);
@@ -34,8 +37,21 @@ export default function App() {
   const handleSearchResults = (results, params) => {
     setSearchResults(results);
     setSearchParams(params);
-    setActivePage('results');
+    setView('results');
   };
+
+  // BottomNav tab handler — keeps results alive when switching back to search tab
+  const handleNavChange = (page) => {
+    if (page === 'search') {
+      // If we have results, go back to results; otherwise go to search form
+      setView(searchResults.length > 0 ? 'results' : 'search');
+    } else {
+      setView(page);
+    }
+  };
+
+  // BottomNav shows which tab is "active" (highlight)
+  const activeTab = view === 'results' ? 'search' : view;
 
   return (
     <div className="app">
@@ -43,7 +59,7 @@ export default function App() {
       <header className="app-header">
         <div
           className="app-logo"
-          onClick={() => setActivePage('search')}
+          onClick={() => setView('search')}
           style={{ cursor: 'pointer' }}
         >
           🌍 StayFinder
@@ -57,15 +73,15 @@ export default function App() {
       {/* Global loading bar */}
       {globalLoading && <div className="loading-bar" />}
 
-      {/* Pages */}
+      {/* Pages — kept mounted when possible for state preservation */}
       <main className="app-main">
-        {activePage === 'search' && (
+        {view === 'search' && (
           <SearchPage
             onSearchResults={handleSearchResults}
             onLoadingChange={setGlobalLoading}
           />
         )}
-        {activePage === 'results' && (
+        {view === 'results' && (
           <ResultsPage
             results={searchResults}
             searchParams={searchParams}
@@ -73,7 +89,7 @@ export default function App() {
             onToggleFavorite={toggleFavorite}
           />
         )}
-        {activePage === 'favorites' && (
+        {view === 'favorites' && (
           <FavoritesPage
             folders={folders}
             isFavorite={isFavorite}
@@ -83,8 +99,8 @@ export default function App() {
       </main>
 
       <BottomNav
-        activePage={activePage === 'results' ? 'search' : activePage}
-        setActivePage={setActivePage}
+        activePage={activeTab}
+        setActivePage={handleNavChange}
         favoritesCount={favorites.length}
       />
     </div>

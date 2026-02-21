@@ -38,7 +38,7 @@ function GuestSelector({ adults, children, setAdults, setChildren }) {
                             <button type="button" onClick={() => setChildren(children + 1)}>+</button>
                         </div>
                     </div>
-                    <button className="guest-done" type="button" onClick={() => setOpen(false)}>Done</button>
+                    <button className="guest-done" type="button" onClick={() => setOpen(false)}>{t('search.searchBtn')}</button>
                 </div>
             )}
         </div>
@@ -55,6 +55,7 @@ export function SearchBar({ onSearch, loading }) {
     const [checkOut, setCheckOut] = useState('');
     const [adults, setAdults] = useState(2);
     const [children, setChildren] = useState(0);
+    const [dateError, setDateError] = useState('');
     const debounceRef = useRef(null);
 
     useEffect(() => {
@@ -83,9 +84,33 @@ export function SearchBar({ onSearch, loading }) {
         setSuggestions([]);
     };
 
+    // Bug #7 fix: validate checkout strictly after checkin
+    const handleCheckoutChange = (value) => {
+        setCheckOut(value);
+        if (checkIn && value && value <= checkIn) {
+            setDateError(t('search.dateError'));
+        } else {
+            setDateError('');
+        }
+    };
+
+    const handleCheckinChange = (value) => {
+        setCheckIn(value);
+        // If checkout is now invalid, clear it
+        if (checkOut && checkOut <= value) {
+            setCheckOut('');
+        }
+        setDateError('');
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!checkIn || !checkOut) return;
+        if (checkOut <= checkIn) {
+            setDateError(t('search.dateError'));
+            return;
+        }
+        setDateError('');
         onSearch({
             destination: selected,
             query,
@@ -141,7 +166,7 @@ export function SearchBar({ onSearch, loading }) {
                             type="date"
                             value={checkIn}
                             min={today}
-                            onChange={(e) => setCheckIn(e.target.value)}
+                            onChange={(e) => handleCheckinChange(e.target.value)}
                             required
                         />
                     </div>
@@ -153,13 +178,14 @@ export function SearchBar({ onSearch, loading }) {
                         <input
                             type="date"
                             value={checkOut}
-                            min={checkIn || today}
-                            onChange={(e) => setCheckOut(e.target.value)}
+                            min={checkIn ? (() => { const d = new Date(checkIn); d.setDate(d.getDate() + 1); return d.toISOString().split('T')[0]; })() : today}
+                            onChange={(e) => handleCheckoutChange(e.target.value)}
                             required
                         />
                     </div>
                 </div>
             </div>
+            {dateError && <div className="date-error">⚠️ {dateError}</div>}
 
             {/* Guests */}
             <div className="search-field">
@@ -172,7 +198,7 @@ export function SearchBar({ onSearch, loading }) {
                 />
             </div>
 
-            <button type="submit" className="search-submit" disabled={loading}>
+            <button type="submit" className="search-submit" disabled={loading || !!dateError}>
                 {loading ? '⏳' : '🔍'} {t('search.searchBtn')}
             </button>
         </form>
