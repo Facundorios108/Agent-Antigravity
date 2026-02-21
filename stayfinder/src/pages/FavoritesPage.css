@@ -1,0 +1,94 @@
+.favorites-page {
+    padding: 16px;
+    padding-bottom: 90px;
+}
+
+.favorites-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.favorites-header h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.fav-count {
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-pill);
+    padding: 4px 12px;
+    font-weight: 600;
+}
+
+/* Empty state */
+.favorites-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    gap: 12px;
+    text-align: center;
+}
+
+.favorites-empty .empty-icon {
+    font-size: 56px;
+}
+
+.favorites-empty h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.favorites-empty p {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* Folders */
+.folders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.folder-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+}
+
+.folder-icon {
+    font-size: 22px;
+}
+
+.folder-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.folder-name {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.folder-count {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.folder-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}

@@ -1,0 +1,119 @@
+/* ─── SearchPage ─── */
+.search-page {
+    min-height: 100%;
+    background: var(--bg);
+}
+
+/* Hero */
+.hero {
+    position: relative;
+    height: 220px;
+    background: linear-gradient(135deg, #FF5A5F 0%, #c03a3f 50%, #762d30 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.05' d='M0,160L48,138.7C96,117,192,75,288,74.7C384,75,480,117,576,138.7C672,160,768,160,864,138.7C960,117,1056,75,1152,80C1248,85,1344,139,1392,165.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E") no-repeat bottom;
+    background-size: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 0 20px 24px;
+    color: #fff;
+}
+
+.hero-logo {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+}
+
+.hero-quote {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 300;
+    letter-spacing: 0.2px;
+}
+
+/* Search Card */
+.search-card {
+    margin: -20px 16px 0;
+    background: var(--bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.search-error {
+    color: var(--primary);
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Popular Section */
+.popular-section {
+    padding: 28px 16px 16px;
+}
+
+.popular-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+}
+
+.popular-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.popular-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 14px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition);
+    border: 1.5px solid transparent;
+}
+
+.popular-card:hover,
+.popular-card:active {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.popular-card:disabled {
+    opacity: 0.6;
+}
+
+.pop-emoji {
+    font-size: 28px;
+}
+
+.pop-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}

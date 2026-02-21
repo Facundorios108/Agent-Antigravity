@@ -1,0 +1,81 @@
+{
+    "translation": {
+        "app": {
+            "name": "StayFinder",
+            "tagline": "Find your perfect stay"
+        },
+        "nav": {
+            "search": "Search",
+            "favorites": "Favorites"
+        },
+        "search": {
+            "destination": "Where are you going?",
+            "destinationPlaceholder": "City, hotel or place...",
+            "checkIn": "Check-in",
+            "checkOut": "Check-out",
+            "guests": "Guests",
+            "adults": "Adults",
+            "children": "Children",
+            "searchBtn": "Search",
+            "noSuggestions": "No results found",
+            "searching": "Searching..."
+        },
+        "filters": {
+            "title": "Filters",
+            "type": "Property Type",
+            "hotel": "Hotel",
+            "apartment": "Apartment",
+            "house": "House",
+            "amenities": "Amenities",
+            "wifi": "WiFi",
+            "breakfast": "Breakfast",
+            "privateBathroom": "Private Bathroom",
+            "priceRange": "Price Range",
+            "perNight": "/ night",
+            "minRating": "Min. Rating",
+            "sort": "Sort By",
+            "sortPriceLow": "Price: Low to High",
+            "sortPriceHigh": "Price: High to Low",
+            "sortRating": "Top Rated",
+            "apply": "Apply Filters",
+            "clear": "Clear",
+            "reset": "Reset Filters"
+        },
+        "results": {
+            "found": "{{count}} properties found",
+            "loading": "Searching for the best options...",
+            "empty": "No results found",
+            "emptyHint": "Try adjusting your dates or filters",
+            "perNight": "/ night",
+            "reviews": "{{count}} reviews",
+            "bookOn": "Book on Hotels.com"
+        },
+        "favorites": {
+            "title": "My Favorites",
+            "empty": "No saved properties yet",
+            "emptyHint": "Tap the heart icon on any property to save it here",
+            "remove": "Remove"
+        },
+        "card": {
+            "save": "Save",
+            "saved": "Saved",
+            "viewDetails": "View Details",
+            "perNight": "/ night"
+        },
+        "modal": {
+            "amenities": "Amenities",
+            "location": "Location",
+            "totalStay": "Total for stay",
+            "nights": "{{count}} night",
+            "nights_plural": "{{count}} nights",
+            "bookNow": "Book on Hotels.com →",
+            "close": "Close",
+            "saveToFavorites": "Save to Favorites",
+            "removeFromFavorites": "Remove from Favorites"
+        },
+        "errors": {
+            "search": "Search error. Please try again.",
+            "network": "Connection error. Check your internet."
+        }
+    }
+}

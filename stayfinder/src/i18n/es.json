@@ -1,0 +1,81 @@
+{
+    "translation": {
+        "app": {
+            "name": "StayFinder",
+            "tagline": "Encontrá tu hospedaje ideal"
+        },
+        "nav": {
+            "search": "Buscar",
+            "favorites": "Favoritos"
+        },
+        "search": {
+            "destination": "¿A dónde vas?",
+            "destinationPlaceholder": "Ciudad, hotel o lugar...",
+            "checkIn": "Llegada",
+            "checkOut": "Salida",
+            "guests": "Huéspedes",
+            "adults": "Adultos",
+            "children": "Niños",
+            "searchBtn": "Buscar",
+            "noSuggestions": "Sin resultados",
+            "searching": "Buscando..."
+        },
+        "filters": {
+            "title": "Filtros",
+            "type": "Tipo de alojamiento",
+            "hotel": "Hotel",
+            "apartment": "Departamento",
+            "house": "Casa",
+            "amenities": "Comodidades",
+            "wifi": "WiFi",
+            "breakfast": "Desayuno",
+            "privateBathroom": "Baño privado",
+            "priceRange": "Rango de precio",
+            "perNight": "/ noche",
+            "minRating": "Calificación mínima",
+            "sort": "Ordenar por",
+            "sortPriceLow": "Precio: menor a mayor",
+            "sortPriceHigh": "Precio: mayor a menor",
+            "sortRating": "Mejor calificados",
+            "apply": "Aplicar filtros",
+            "clear": "Limpiar",
+            "reset": "Resetear filtros"
+        },
+        "results": {
+            "found": "{{count}} propiedades encontradas",
+            "loading": "Buscando las mejores opciones...",
+            "empty": "Sin resultados",
+            "emptyHint": "Intentá ajustar las fechas o los filtros",
+            "perNight": "/ noche",
+            "reviews": "{{count}} reseñas",
+            "bookOn": "Reservar en Hotels.com"
+        },
+        "favorites": {
+            "title": "Mis favoritos",
+            "empty": "Aún no guardaste propiedades",
+            "emptyHint": "Tocá el corazón en cualquier propiedad para guardarla aquí",
+            "remove": "Eliminar"
+        },
+        "card": {
+            "save": "Guardar",
+            "saved": "Guardado",
+            "viewDetails": "Ver detalles",
+            "perNight": "/ noche"
+        },
+        "modal": {
+            "amenities": "Comodidades",
+            "location": "Ubicación",
+            "totalStay": "Total de la estadía",
+            "nights": "{{count}} noche",
+            "nights_plural": "{{count}} noches",
+            "bookNow": "Reservar en Hotels.com →",
+            "close": "Cerrar",
+            "saveToFavorites": "Guardar en favoritos",
+            "removeFromFavorites": "Quitar de favoritos"
+        },
+        "errors": {
+            "search": "Error en la búsqueda. Intentá nuevamente.",
+            "network": "Error de conexión. Verificá tu internet."
+        }
+    }
+}
