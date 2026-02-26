@@ -82,7 +82,8 @@
         },
         "errors": {
             "search": "Error en la búsqueda. Intentá nuevamente.",
-            "network": "Error de conexión. Verificá tu internet."
+            "network": "Error de conexión. Verificá tu internet.",
+            "promptNoCity": "No pudimos encontrar la ciudad. Intentá ser más específico."
         }
     }
 }

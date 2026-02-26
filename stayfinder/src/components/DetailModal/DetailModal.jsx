@@ -165,6 +165,10 @@ export function DetailModal({ hotel, checkinDate, checkoutDate, isFavorite, onTo
                         target="_blank"
                         rel="noopener noreferrer"
                         className="book-btn"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            window.open(hotel.url, '_blank', 'noopener,noreferrer');
+                        }}
                     >
                         {t('modal.bookNow')}
                     </a>

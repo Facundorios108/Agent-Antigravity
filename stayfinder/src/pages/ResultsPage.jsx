@@ -119,6 +119,14 @@ export function ResultsPage({ results: initialResults, searchParams, isFavorite,
                 </div>
             </div>
 
+            {/* Prompt summary banner */}
+            {searchParams?.fromPrompt && searchParams?.promptInfo?.summary && (
+                <div className="prompt-banner">
+                    <span className="prompt-banner-icon">💬</span>
+                    <span className="prompt-banner-text">{searchParams.promptInfo.summary}</span>
+                </div>
+            )}
+
             {/* Filters */}
             <FilterPanel
                 filters={filters}

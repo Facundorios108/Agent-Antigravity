@@ -38,15 +38,36 @@ export async function searchLocations(query) {
 
   const items = Array.isArray(json?.data) ? json.data : [];
 
+  if (items.length > 0) {
+    console.log('[StayFinder] autocomplete item[0]:', items[0]);
+  }
+
   return items
-    .filter((item) => item.id || item.dest_id)
+    .filter((item) => item.dest_id || item.city_ufi || item.id)
     .slice(0, 6)
-    .map((item) => ({
-      locationId: item.id,
-      label: item.label || item.name || query,
-      subLabel: item.country || '',
-      type: item.dest_type || item.type || 'city',
-    }));
+    .map((item) => {
+      // The stays/search endpoint accepts:
+      //   - city_ufi  (positive integer) for city/region types
+      //   - dest_id   (positive integer) for hotel types
+      // dest_id is NEGATIVE for cities in this API (≠ usable for hotel search)
+      const destId = Number(item.dest_id);
+      const cityUfi = Number(item.city_ufi);
+      let locationId;
+      if (cityUfi > 0) {
+        locationId = cityUfi;         // preferred for city-type results
+      } else if (destId > 0) {
+        locationId = destId;          // positive dest_id works for hotel/region
+      } else {
+        locationId = item.id ?? destId; // last resort
+      }
+      return {
+        locationId,
+        label: item.label || item.name || query,
+        subLabel: item.country || '',
+        type: item.dest_type || item.type || 'city',
+      };
+    })
+    .filter((item) => item.locationId); // drop any that still have no valid ID
 }
 
 /**
@@ -65,6 +86,13 @@ export async function searchProperties({
 }) {
   if (!locationId) throw new Error('locationId is required');
 
+  // Guard: dates must be real YYYY-MM-DD strings
+  const checkinOk = typeof checkinDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(checkinDate);
+  const checkoutOk = typeof checkoutDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(checkoutDate);
+  if (!checkinOk || !checkoutOk) {
+    throw new Error(`Invalid dates — checkin: ${checkinDate}, checkout: ${checkoutDate}`);
+  }
+
   const nights = nightsBetween(checkinDate, checkoutDate);
 
   const params = new URLSearchParams({
@@ -74,7 +102,7 @@ export async function searchProperties({
     adults: String(adults),
     rooms: String(rooms),
     sortBy,
-    currency: 'USD', // always fetch in USD, convert client-side
+    currency: 'USD',
     units: 'metric',
     pageNumber: String(pageNumber),
   });
@@ -83,8 +111,20 @@ export async function searchProperties({
   }
 
   const url = `${BASE_URL}/stays/search?${params.toString()}`;
+  console.log('[StayFinder] searchProperties →', { locationId, checkinDate, checkoutDate, adults, rooms });
+
   const res = await fetch(url, { method: 'GET', headers });
-  if (!res.ok) throw new Error(`Hotel search failed: ${res.status}`);
+  if (!res.ok) {
+    // Try to read the body for a more informative error message
+    let body = '';
+    try { body = await res.text(); } catch (_) { /* ignore */ }
+    console.error('[StayFinder] API error', res.status, body);
+    // Surface a user-friendly message based on status
+    if (res.status === 403 || res.status === 429) {
+      throw new Error(`API quota exceeded or auth error (${res.status}). Please try again later.`);
+    }
+    throw new Error(`Hotel search failed: ${res.status} — ${body.slice(0, 120)}`);
+  }
   const json = await res.json();
 
   const hotels = Array.isArray(json?.data) ? json.data : [];
@@ -107,8 +147,11 @@ export async function searchProperties({
     const imageUrls = (h.photoUrls ?? []).map(hqPhoto).filter(Boolean);
     const mainImage = imageUrls[0] ?? null;
 
-    // Booking deep link
-    const hotelBookingUrl = `https://www.booking.com/hotel/${h.countryCode ?? 'xx'}/${h.id}.html?checkin=${checkinDate}&checkout=${checkoutDate}&group_adults=${adults}&no_rooms=${rooms}&selected_currency=USD`;
+    // Booking deep link.
+    // The /hotel/{cc}/{id}.html format uses an internal name-slug, NOT the numeric
+    // property ID, so it returns 404. We use the search URL with the hotel name
+    // + property type filter which always resolves to the correct hotel page.
+    const hotelBookingUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(h.name ?? '')}&checkin=${checkinDate}&checkout=${checkoutDate}&group_adults=${adults}&no_rooms=${rooms}&selected_currency=USD&src=searchresults&dest_type=hotel`;
 
     return {
       id: String(h.id ?? Math.random()),

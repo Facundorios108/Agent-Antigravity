@@ -82,7 +82,8 @@
         },
         "errors": {
             "search": "Search error. Please try again.",
-            "network": "Connection error. Check your internet."
+            "network": "Connection error. Check your internet.",
+            "promptNoCity": "Could not find the city. Try being more specific."
         }
     }
 }

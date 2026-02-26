@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SearchBar } from '../components/SearchBar/SearchBar';
+import { PromptSearch } from '../components/PromptSearch/PromptSearch';
 import { searchProperties } from '../services/hotelsApi';
 import './SearchPage.css';
 
@@ -9,9 +10,6 @@ const HERO_QUOTES = {
     es: ['¿Dónde te llevará tu historia?', 'Tu próxima aventura empieza aquí', 'Explorar. Quedarse. Recordar.'],
 };
 
-// Popular destinations — use real locationIds from auto-complete,
-// but for quick search we pass the city name as the query to /stays/search
-// via a search string approach (auto-complete will resolve it during quick search below)
 const POPULAR_DESTINATIONS = [
     { name: 'Paris', emoji: '🗼' },
     { name: 'New York', emoji: '🗽' },
@@ -25,9 +23,11 @@ export function SearchPage({ onSearchResults, onLoadingChange }) {
     const { t, i18n } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [searchTab, setSearchTab] = useState('filters'); // 'filters' | 'prompt'
 
     const quoteList = HERO_QUOTES[i18n.language] || HERO_QUOTES.en;
     const quote = quoteList[Math.floor(Date.now() / 86400000) % quoteList.length];
+    const isEs = i18n.language === 'es';
 
     const handleSearch = async (params) => {
         setLoading(true);
@@ -110,16 +110,44 @@ export function SearchPage({ onSearchResults, onLoadingChange }) {
                 </div>
             </div>
 
-            {/* Search Form */}
+            {/* Search Card with tabs */}
             <div className="search-card">
-                <SearchBar onSearch={handleSearch} loading={loading} />
-                {error && <div className="search-error">{error}</div>}
+                {/* Tab switcher */}
+                <div className="search-tabs">
+                    <button
+                        className={`search-tab ${searchTab === 'filters' ? 'active' : ''}`}
+                        onClick={() => setSearchTab('filters')}
+                    >
+                        🔍 {isEs ? 'Buscar por filtros' : 'Search by filters'}
+                    </button>
+                    <button
+                        className={`search-tab ${searchTab === 'prompt' ? 'active' : ''}`}
+                        onClick={() => setSearchTab('prompt')}
+                    >
+                        💬 {isEs ? 'Buscar contando' : 'Describe it'}
+                    </button>
+                </div>
+
+                {/* Tab content */}
+                <div className="search-tab-content">
+                    {searchTab === 'filters' ? (
+                        <>
+                            <SearchBar onSearch={handleSearch} loading={loading} />
+                            {error && <div className="search-error">{error}</div>}
+                        </>
+                    ) : (
+                        <PromptSearch
+                            onSearchResults={onSearchResults}
+                            onLoadingChange={onLoadingChange}
+                        />
+                    )}
+                </div>
             </div>
 
             {/* Popular Destinations */}
             <div className="popular-section">
                 <h2 className="popular-title">
-                    {i18n.language === 'es' ? 'Destinos populares' : 'Popular destinations'}
+                    {isEs ? 'Destinos populares' : 'Popular destinations'}
                 </h2>
                 <div className="popular-grid">
                     {POPULAR_DESTINATIONS.map((dest) => (

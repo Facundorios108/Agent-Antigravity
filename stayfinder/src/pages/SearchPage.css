@@ -8,7 +8,7 @@
 .hero {
     position: relative;
     height: 220px;
-    background: linear-gradient(135deg, #FF5A5F 0%, #c03a3f 50%, #762d30 100%);
+    background: linear-gradient(135deg, #00B37D 0%, #009467 50%, #006b4c 100%);
     overflow: hidden;
     display: flex;
     align-items: flex-end;
@@ -65,6 +65,59 @@
     font-size: 13px;
     margin-top: 10px;
     text-align: center;
+}
+
+/* Search Tabs */
+.search-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 4px;
+    margin-bottom: 16px;
+}
+
+.search-tab {
+    flex: 1;
+    padding: 9px 6px;
+    border-radius: calc(var(--radius-md) - 3px);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font);
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    text-align: center;
+}
+
+.search-tab.active {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 179, 125, 0.3);
+}
+
+.search-tab:not(.active):hover {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.search-tab-content {
+    animation: tabFadeIn 0.2s ease;
+}
+
+@keyframes tabFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Popular Section */

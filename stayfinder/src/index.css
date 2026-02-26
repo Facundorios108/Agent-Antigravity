@@ -2,10 +2,10 @@
 
 /* ─── Design Tokens ─── */
 :root {
-  --primary: #FF5A5F;
-  --primary-dark: #e04e53;
-  --primary-light: #fff0f0;
-  --accent: #00A699;
+  --primary: #00B37D;
+  --primary-dark: #009467;
+  --primary-light: #e6f9f3;
+  --accent: #34D399;
   --bg: #ffffff;
   --bg-secondary: #F7F7F7;
   --bg-card: #ffffff;
@@ -13,9 +13,9 @@
   --text-secondary: #717171;
   --text-muted: #b0b0b0;
   --border: #DDDDDD;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 20px rgba(0,0,0,0.12);
-  --shadow-lg: 0 8px 40px rgba(0,0,0,0.15);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.15);
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
@@ -27,8 +27,19 @@
 }
 
 /* ─── Reset ─── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; scroll-behavior: smooth; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font);
   background: var(--bg-secondary);
@@ -36,10 +47,28 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-button, input, select { font-family: var(--font); }
-button { cursor: pointer; border: none; background: none; }
-a { text-decoration: none; color: inherit; }
-img { max-width: 100%; display: block; }
+
+button,
+input,
+select {
+  font-family: var(--font);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
 
 /* ─── App Layout ─── */
 .app {
@@ -58,7 +87,7 @@ img { max-width: 100%; display: block; }
   top: 0;
   z-index: 100;
   height: var(--header-height);
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -66,6 +95,7 @@ img { max-width: 100%; display: block; }
   justify-content: space-between;
   padding: 0 16px;
 }
+
 .logo-btn {
   display: flex;
   align-items: center;
@@ -75,8 +105,14 @@ img { max-width: 100%; display: block; }
   color: var(--primary);
   transition: var(--transition);
 }
-.logo-btn:hover { opacity: 0.8; }
-.logo-text { letter-spacing: -0.3px; }
+
+.logo-btn:hover {
+  opacity: 0.8;
+}
+
+.logo-text {
+  letter-spacing: -0.3px;
+}
 
 /* ─── App Main ─── */
 .app-main {
@@ -91,13 +127,14 @@ img { max-width: 100%; display: block; }
   position: fixed;
   inset: 0;
   z-index: 999;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255, 255, 255, 0.92);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 16px;
 }
+
 .loader-spinner {
   width: 44px;
   height: 44px;
@@ -106,7 +143,12 @@ img { max-width: 100%; display: block; }
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* ─── Common: Hotel Grid ─── */
 .hotel-grid {
